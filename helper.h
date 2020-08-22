@@ -17,7 +17,6 @@
         end = clock();
         outputSortedArray(arr,n);
         outputTimeTaken(start,end);
-        printf("\nend = %d, start = %d, diff = %d",start,end,end-start);
         free(arr);
     }
     void inputArray(int* arr,int n){
@@ -37,6 +36,6 @@
     void outputTimeTaken(clock_t start,clock_t end){
         float cpu_time;
         cpu_time = ((float)(end-start))/CLOCKS_PER_SEC;
-        printf("\nTime taken in ms is %d \n",cpu_time*1000);
+        printf("\nTime taken in ms is %f \n",cpu_time*1000);
     }
 

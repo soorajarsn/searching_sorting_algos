@@ -49,7 +49,7 @@ int main(){
     inputSize(&heapSize);
     printf("\nReading input file... ");
     inputArray(h,heapSize);
-    printf("\nEnter the value rank of element to be found : ");
+    printf("\nEnter the rank of element to be found : ");
     scanf("%d",&k);
     clock_t start,end;
     start = clock();
@@ -59,6 +59,5 @@ int main(){
     int e = -1;
     for(int i = 0; i < k; i++)
         e = extractMin(h,&heapSize);
-    printf("\n The kth smallest elements is %d\n",e);
     return 0;
 }

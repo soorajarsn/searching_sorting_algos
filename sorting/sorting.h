@@ -1,5 +1,6 @@
 
 	#include<stdlib.h>
+	#include<stdio.h>
 	#define TRUE 1;
 	#define FALSE 0;
 	void bubbleSort(int*, int);
@@ -11,6 +12,16 @@
 	void swap(int*, int*);
 	void merge(int*,int,int,int);
 	void useMergeSort(int*,int);
+	void quickSort(int*, int, int);
+	void quickSort_sortedBest(int*, int, int, int);
+	int partition(int*, int, int);
+	int partition_sortedBest(int*, int, int);
+	void useQuickSort(int*,int);
+	void useQuickSort_sortedBest(int*,int);
+	void countingSort(int*, int);
+	void useCountingSort(int*, int, int);
+	void radixSort(int*, int);
+	int getMax(int*,int);
 	void bubbleSort(int* arr, int n){
 		for(int i = 0; i < n-1; i++){
 			int swapped = FALSE;
@@ -88,6 +99,57 @@
 	void useMergeSort(int *arr,int n){
 		mergeSort(arr,0,n-1);
 	}
+	int partition(int* arr, int low, int high){
+		int x = arr[high];
+		int i = low - 1;
+		for(int j = low; j < high; j++){
+			if(arr[j] <= x){
+				i = i+1;
+				swap(arr+i,arr+j);
+			}
+		}
+		swap(arr+i+1,arr+high);
+		return i+1;
+	}
+	void quickSort(int *arr, int low, int high){
+		if(low < high){
+			int q = partition(arr,low,high);
+			quickSort(arr,low,q-1);
+			quickSort(arr,q+1,high);
+		}
+	}
+	void useQuickSort(int* arr, int n){
+		quickSort(arr,0,n-1);	
+	}
+	int partition_sortedBest(int* arr, int low, int high){
+		int pivot, mid;
+		pivot = mid = (low+high)/2;
+		int i = low - 1;
+		for(int j = low; j < mid; j++)
+			if(arr[j] <= arr[pivot]){
+				i = i+1;
+				swap(arr+i,arr+j);
+			}
+		for(int j = mid+1; j <= high; j++)
+			if(arr[j] <= arr[pivot]){
+				i = i+1;
+				if(i == pivot)
+					pivot = j;
+				swap(arr+j, arr+i);		
+			}
+		swap(arr+i+1,arr+pivot);
+		return i+1;
+	}
+	void quickSort_sortedBest(int* arr, int low, int high,int n){
+		if(low < high){
+			int q = partition_sortedBest(arr,low,high);
+			quickSort_sortedBest(arr,low,q-1,n);
+			quickSort_sortedBest(arr,q+1,high,n);
+		}
+	}
+	void useQuickSort_sortedBest(int* arr, int n){
+		quickSort_sortedBest(arr,0,n-1,n);
+	}
 	void heapify(int* arr,int n, int i){
 		int max = i;
 		int l = 2*i + 1;
@@ -116,4 +178,48 @@
 		*a = *b;
 		*b = temp;
 	}
-
+//soritng in linear time
+int getMax(int* arr, int n){
+	int max = -1;
+	for(int i = 0; i < n; i++)
+		if(max < arr[i])
+			max = arr[i];
+	return max;
+}
+void CountingSort(int*arr, int n){
+	//finding range
+	int max = getMax(arr,n);
+	max++;
+	int* posArr = (int*)malloc(max*sizeof(int));
+	for(int i = 0; i < max; i++)
+		posArr[i] = 0;
+	for(int i = 0; i < n; i++)
+		posArr[arr[i]]++;
+	for(int i = 1; i < max; i++)
+		posArr[i] += posArr[i-1];
+	int* sortedArr = (int*)malloc(n*sizeof(int));
+	for(int i = n-1; i >= 0; i--)
+		sortedArr[--posArr[arr[i]]] = arr[i];
+	for(int i = 0; i < n; i++)
+		arr[i] = sortedArr[i];
+}
+void useCountingSort(int* arr, int n, int e){
+ 	int* r = (int*)malloc(n*sizeof(int));
+    int i, count[10] = {0,0,0,0,0,0,0,0,0,0}; 
+	
+    for (i = 0; i < n; i++) 
+        count[(arr[i]/e)%10]++; 
+  
+    for (i = 1; i < 10; i++) 
+        count[i] += count[i - 1];
+		
+    for (i = n - 1; i >= 0; i--)
+        r[--count[(arr[i]/e)%10]] = arr[i];
+    for (i = 0; i < n; i++) 
+        arr[i] = r[i];	
+}
+void radixSort(int* arr, int n){
+	int m = getMax(arr, n);
+    for (int e = 1; m/e > 0; e *= 10) 
+        useCountingSort(arr, n, e); 
+}

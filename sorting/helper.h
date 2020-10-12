@@ -15,14 +15,19 @@
         start = clock();
         (*algo)(arr,n);
         end = clock();
-        outputSortedArray(arr,n);
+        // outputSortedArray(arr,n);
         outputTimeTaken(start,end);
         free(arr);
     }
     void inputArray(int* arr,int n){
-        printf("\nEnter %d integers: ",n);
-        for(int i = 0; i < n; i++)
-            scanf("%d",arr+i);
+        FILE* file = fopen("input.txt","r");
+        if(!file){
+            printf("can't read file");
+            exit(-1);
+        }
+        for(int i = 0; i < n && !feof(file); i++)
+            fscanf(file,"%d",arr+i);
+        fclose(file);
     }
     void inputSize(int *n){
         printf("\nArray Size : ");

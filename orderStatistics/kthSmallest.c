@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
+#include"./helper.h"
 typedef struct heap{
     int elements[1000000];
     int heapSize;
@@ -44,13 +46,16 @@ int main(){
     int h[1000000];
     int k, heapSize;
     printf("\nEnter Number of Elements : ");
-    scanf("%d",&heapSize);
-    printf("\nEnter the Numbers : ");
-    for(int i = 0; i < heapSize; i++)
-        scanf("%d",&h[i]);
+    inputSize(&heapSize);
+    printf("\nReading input file... ");
+    inputArray(h,heapSize);
     printf("\nEnter the value rank of element to be found : ");
     scanf("%d",&k);
+    clock_t start,end;
+    start = clock();
     buildMinHeap(h,heapSize);
+    end = clock();
+    outputTimeTaken(start,end);
     int e = -1;
     for(int i = 0; i < k; i++)
         e = extractMin(h,&heapSize);
